@@ -1,13 +1,13 @@
 const tileSize = 40;
-let levels = []; // all levels
-let tiles = [];  // current level tiles
-let currentLevel = 0;
+let levels = {};      // FIX: object, not array
+let tiles = [];       // current level tiles
+let currentLevel = 1; // FIX: 1-based because levels = { 1: [...], 2: [...] }
 let player;
 
 // --- DEFINE LEVELS ---
 function defineLevels() {
-  levels = [
-    [
+  levels = {
+    1: [
       { x: 3, y: 10, type: "ground" },
       { x: 4, y: 10, type: "ground" },
       { x: 5, y: 10, type: "ground" },
@@ -17,7 +17,7 @@ function defineLevels() {
       { x: 0, y: 13, type: "ground" },
       { x: 1, y: 13, type: "ground" },
       { x: 2, y: 13, type: "ground" },
-      { x: 5, y: 14, type: "coin" }, 
+      { x: 5, y: 14, type: "coin" },
       { x: 15, y: 14, type: "coin" },
       { x: 4, y: 15, type: "ground" },
       { x: 5, y: 15, type: "ground" },
@@ -61,8 +61,155 @@ function defineLevels() {
       { x: 17, y: 19, type: "ground" },
       { x: 18, y: 19, type: "ground" },
       { x: 19, y: 19, type: "ground" }
+    ],
+
+    // --- YOUR BIG LEVEL 2 ---
+    2: [
+      { "x": 0, "y": 0, "type": "coin" },
+      { "x": 8, "y": 0, "type": "coin" },
+      { "x": 19, "y": 0, "type": "coin" },
+      { "x": 2, "y": 1, "type": "ground" },
+      { "x": 3, "y": 1, "type": "ground" },
+      { "x": 4, "y": 1, "type": "ground" },
+      { "x": 5, "y": 1, "type": "ground" },
+      { "x": 6, "y": 1, "type": "ground" },
+      { "x": 7, "y": 1, "type": "ground" },
+      { "x": 8, "y": 1, "type": "ground" },
+      { "x": 9, "y": 1, "type": "ground" },
+      { "x": 10, "y": 1, "type": "ground" },
+      { "x": 11, "y": 1, "type": "ground" },
+      { "x": 12, "y": 1, "type": "ground" },
+      { "x": 13, "y": 1, "type": "ground" },
+      { "x": 14, "y": 1, "type": "ground" },
+      { "x": 15, "y": 1, "type": "ground" },
+      { "x": 16, "y": 1, "type": "ground" },
+      { "x": 17, "y": 1, "type": "ground" },
+      { "x": 18, "y": 1, "type": "ground" },
+      { "x": 19, "y": 1, "type": "ground" },
+      { "x": 2, "y": 2, "type": "ground" },
+      { "x": 3, "y": 2, "type": "empty" },
+      { "x": 4, "y": 2, "type": "empty" },
+      { "x": 5, "y": 2, "type": "empty" },
+      { "x": 16, "y": 2, "type": "spike" },
+      { "x": 19, "y": 2, "type": "spike" },
+      { "x": 0, "y": 3, "type": "ground" },
+      { "x": 0, "y": 4, "type": "ground" },
+      { "x": 1, "y": 4, "type": "coin" },
+      { "x": 8, "y": 4, "type": "coin" },
+      { "x": 14, "y": 4, "type": "coin" },
+      { "x": 0, "y": 5, "type": "ground" },
+      { "x": 1, "y": 5, "type": "ground" },
+      { "x": 2, "y": 5, "type": "ground" },
+      { "x": 7, "y": 5, "type": "ground" },
+      { "x": 8, "y": 5, "type": "ground" },
+      { "x": 9, "y": 5, "type": "empty" },
+      { "x": 10, "y": 5, "type": "spike" },
+      { "x": 11, "y": 5, "type": "spike" },
+      { "x": 13, "y": 5, "type": "ground" },
+      { "x": 14, "y": 5, "type": "ground" },
+      { "x": 15, "y": 5, "type": "ground" },
+      { "x": 16, "y": 5, "type": "ground" },
+      { "x": 4, "y": 6, "type": "spike" },
+      { "x": 5, "y": 6, "type": "spike" },
+      { "x": 19, "y": 6, "type": "ground" },
+      { "x": 19, "y": 7, "type": "ground" },
+      { "x": 1, "y": 8, "type": "spike" },
+      { "x": 9, "y": 8, "type": "empty" },
+      { "x": 14, "y": 8, "type": "ground" },
+      { "x": 15, "y": 8, "type": "ground" },
+      { "x": 16, "y": 8, "type": "ground" },
+      { "x": 17, "y": 8, "type": "ground" },
+      { "x": 18, "y": 8, "type": "lava" },
+      { "x": 19, "y": 8, "type": "lava" },
+      { "x": 9, "y": 9, "type": "spike" },
+      { "x": 11, "y": 9, "type": "coin" },
+      { "x": 14, "y": 9, "type": "ground" },
+      { "x": 15, "y": 9, "type": "ground" },
+      { "x": 16, "y": 9, "type": "ground" },
+      { "x": 17, "y": 9, "type": "ground" },
+      { "x": 18, "y": 9, "type": "ground" },
+      { "x": 19, "y": 9, "type": "ground" },
+      { "x": 6, "y": 10, "type": "spike" },
+      { "x": 8, "y": 10, "type": "ground" },
+      { "x": 9, "y": 10, "type": "ground" },
+      { "x": 10, "y": 10, "type": "ground" },
+      { "x": 11, "y": 10, "type": "ground" },
+      { "x": 12, "y": 10, "type": "ground" },
+      { "x": 13, "y": 10, "type": "ground" },
+      { "x": 14, "y": 10, "type": "ground" },
+      { "x": 3, "y": 11, "type": "spike" },
+      { "x": 4, "y": 11, "type": "coin" },
+      { "x": 5, "y": 11, "type": "ground" },
+      { "x": 6, "y": 11, "type": "ground" },
+      { "x": 7, "y": 11, "type": "ground" },
+      { "x": 18, "y": 11, "type": "coin" },
+      { "x": 0, "y": 12, "type": "coin" },
+      { "x": 2, "y": 12, "type": "ground" },
+      { "x": 3, "y": 12, "type": "ground" },
+      { "x": 4, "y": 12, "type": "ground" },
+      { "x": 18, "y": 12, "type": "ground" },
+      { "x": 0, "y": 13, "type": "ground" },
+      { "x": 8, "y": 13, "type": "coin" },
+      { "x": 15, "y": 13, "type": "coin" },
+      { "x": 17, "y": 13, "type": "ground" },
+      { "x": 8, "y": 14, "type": "ground" },
+      { "x": 9, "y": 14, "type": "ground" },
+      { "x": 10, "y": 14, "type": "ground" },
+      { "x": 11, "y": 14, "type": "spike" },
+      { "x": 12, "y": 14, "type": "spike" },
+      { "x": 13, "y": 14, "type": "spike" },
+      { "x": 14, "y": 14, "type": "spike" },
+      { "x": 15, "y": 14, "type": "ground" },
+      { "x": 16, "y": 14, "type": "ground" },
+      { "x": 17, "y": 14, "type": "ground" },
+      { "x": 19, "y": 14, "type": "ground" },
+      { "x": 0, "y": 15, "type": "ground" },
+      { "x": 1, "y": 15, "type": "ground" },
+      { "x": 2, "y": 15, "type": "ground" },
+      { "x": 3, "y": 15, "type": "ground" },
+      { "x": 4, "y": 15, "type": "ground" },
+      { "x": 5, "y": 15, "type": "ground" },
+      { "x": 6, "y": 15, "type": "spike" },
+      { "x": 7, "y": 15, "type": "spike" },
+      { "x": 0, "y": 16, "type": "ground" },
+      { "x": 1, "y": 16, "type": "ground" },
+      { "x": 2, "y": 16, "type": "ground" },
+      { "x": 13, "y": 16, "type": "coin" },
+      { "x": 18, "y": 16, "type": "ground" },
+      { "x": 9, "y": 17, "type": "coin" },
+      { "x": 11, "y": 17, "type": "ground" },
+      { "x": 12, "y": 17, "type": "ground" },
+      { "x": 13, "y": 17, "type": "ground" },
+      { "x": 14, "y": 17, "type": "ground" },
+      { "x": 3, "y": 18, "type": "coin" },
+      { "x": 8, "y": 18, "type": "ground" },
+      { "x": 9, "y": 18, "type": "ground" },
+      { "x": 10, "y": 18, "type": "ground" },
+      { "x": 11, "y": 18, "type": "coin" },
+      { "x": 16, "y": 18, "type": "spike" },
+      { "x": 18, "y": 18, "type": "ground" },
+      { "x": 19, "y": 18, "type": "ground" },
+      { "x": 0, "y": 19, "type": "ground" },
+      { "x": 1, "y": 19, "type": "ground" },
+      { "x": 2, "y": 19, "type": "ground" },
+      { "x": 3, "y": 19, "type": "ground" },
+      { "x": 4, "y": 19, "type": "lava" },
+      { "x": 5, "y": 19, "type": "lava" },
+      { "x": 6, "y": 19, "type": "lava" },
+      { "x": 7, "y": 19, "type": "lava" },
+      { "x": 8, "y": 19, "type": "ground" },
+      { "x": 9, "y": 19, "type": "ground" },
+      { "x": 10, "y": 19, "type": "ground" },
+      { "x": 11, "y": 19, "type": "ground" },
+      { "x": 12, "y": 19, "type": "ground" },
+      { "x": 13, "y": 19, "type": "ground" },
+      { "x": 14, "y": 19, "type": "ground" },
+      { "x": 15, "y": 19, "type": "ground" },
+      { "x": 16, "y": 19, "type": "ground" },
+      { "x": 17, "y": 19, "type": "ground" },
+      { "x": 18, "y": 19, "type": "ground" }
     ]
-  ];
+  };
 }
 
 // --- SETUP ---
@@ -98,10 +245,15 @@ function draw() {
 }
 
 // --- LOAD LEVEL ---
-function loadLevel(index) {
+function loadLevel(levelNum) {
+  // FIX: rebuild tiles from the selected level in the object
   tiles = [];
-  let level = levels[index];
-  for (let t of level) {
+  const levelData = levels[levelNum];
+  if (!levelData) {
+    console.warn("No level found for key:", levelNum);
+    return;
+  }
+  for (let t of levelData) {
     tiles.push(new Tile(t.x * tileSize, t.y * tileSize, tileSize, tileSize, t.type));
   }
   player.reset();
@@ -109,10 +261,11 @@ function loadLevel(index) {
 
 // --- NEXT LEVEL ---
 function nextLevel() {
-  currentLevel++;
-  if (currentLevel >= levels.length) {
-    currentLevel = 0;
-  }
+  // FIX: rotate through object keys instead of using levels.length
+  const keys = Object.keys(levels).map(Number).sort((a, b) => a - b);
+  const idx = keys.indexOf(currentLevel);
+  const nextIdx = (idx + 1) % keys.length;
+  currentLevel = keys[nextIdx];
   loadLevel(currentLevel);
 }
 
@@ -197,6 +350,21 @@ class Player {
     this.resolveVerticalCollision();   // 🆕 new method
 
     if (this.y > height) this.reset();
+
+    // --- keep player inside screen boundaries ---
+    if (this.x < 0) {
+      this.x = 0;
+      this.xSpeed = 0;
+    }
+    if (this.x + this.w > width) {
+      this.x = width - this.w;
+      this.xSpeed = 0;
+    }
+    if (this.y + this.h > height) {
+      this.y = height - this.h;
+      this.ySpeed = 0;
+      this.onGround = true;
+    }
   }
 
   // 🆕 Handles collisions left and right
@@ -265,5 +433,5 @@ function keyPressed() {
 function drawHUD() {
   fill(0);
   textSize(16);
-  text(`Level: ${currentLevel + 1}   Coins: ${player.coins}`, 10, 20);
+  text(`Level: ${currentLevel}   Coins: ${player.coins}`, 10, 20);
 }
