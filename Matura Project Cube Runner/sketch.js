@@ -62,8 +62,6 @@ function defineLevels() {
       { x: 18, y: 19, type: "ground" },
       { x: 19, y: 19, type: "ground" }
     ],
-
-    // --- YOUR BIG LEVEL 2 ---
     2: [
       { "x": 0, "y": 0, "type": "coin" },
       { "x": 8, "y": 0, "type": "coin" },
@@ -209,7 +207,7 @@ function defineLevels() {
       { "x": 17, "y": 19, "type": "ground" },
       { "x": 18, "y": 19, "type": "ground" },
     ],
-  3: [
+    3: [
   {
     "x": 0,
     "y": 0,
@@ -1190,9 +1188,8 @@ function defineLevels() {
     "y": 19,
     "type": "ground"
   }
-],
-
-4: [
+    ],
+    4: [
   {
     "x": 0,
     "y": 0,
@@ -1743,11 +1740,7 @@ function defineLevels() {
     "y": 11,
     "type": "ground"
   },
-  {
-    "x": 2,
-    "y": 11,
-    "type": "ground"
-  },
+  
   {
     "x": 9,
     "y": 11,
@@ -1787,11 +1780,6 @@ function defineLevels() {
     "x": 19,
     "y": 11,
     "type": "ground"
-  },
-  {
-    "x": 7,
-    "y": 12,
-    "type": "undefined"
   },
   {
     "x": 8,
@@ -1872,11 +1860,6 @@ function defineLevels() {
     "x": 7,
     "y": 15,
     "type": "coin"
-  },
-  {
-    "x": 17,
-    "y": 15,
-    "type": "ground"
   },
   {
     "x": 18,
@@ -2098,7 +2081,7 @@ function defineLevels() {
     "y": 19,
     "type": "lava"
   }
-]
+    ]
   };
 }
 
@@ -2107,7 +2090,7 @@ function setup() {
   createCanvas(800, 800);
   defineLevels();
   player = new Player();
-  loadLevel(currentLevel+3);
+  loadLevel(currentLevel);
 }
 
 // --- MAIN LOOP ---
