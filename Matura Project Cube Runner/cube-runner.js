@@ -3356,7 +3356,7 @@ function setup() {
 // --- MAIN LOOP ---
 function draw() {
   background(135, 206, 235);
-
+  endReached = false;
   player.update();
   player.display();
 
