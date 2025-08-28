@@ -1,23 +1,22 @@
-html, body {
-    height: 100%;
+html,
+body {
+  height: 100%;
 }
 
 html {
-    display: table;
-    margin: auto;
+  display: block;
+  margin: auto;
 }
 
 body {
-    display: table-cell;
-    vertical-align: middle;
-    background-color: grey;
+  display: table-cell;
+  vertical-align: middle;
+  background-color: grey;
 }
 
 p1 {
-    font-size: large;
+  font-size: large;
 }
-
-
 
 canvas {
   display: block;
