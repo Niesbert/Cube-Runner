@@ -5,6 +5,9 @@ let currentLevel = 1; // FIX: 1-based because levels = { 1: [...], 2: [...] }
 let player;
 let lastRespawnX;
 let lastRespawnY;
+let startX;
+let startY;
+let endReached;
 
 // --- DEFINE LEVELS ---
 function defineLevels() {
@@ -28,7 +31,7 @@ function defineLevels() {
       {
         x: 18,
         y: 0,
-        type: "coin",
+        type: "end",
       },
       {
         x: 0,
@@ -648,7 +651,7 @@ function defineLevels() {
       {
         x: 0,
         y: 19,
-        type: "ground",
+        type: "start",
       },
       {
         x: 1,
@@ -749,7 +752,7 @@ function defineLevels() {
     2: [
       { x: 0, y: 0, type: "coin" },
       { x: 8, y: 0, type: "coin" },
-      { x: 19, y: 0, type: "coin" },
+      { x: 19, y: 0, type: "end" },
       { x: 2, y: 1, type: "ground" },
       { x: 3, y: 1, type: "ground" },
       { x: 4, y: 1, type: "ground" },
@@ -871,7 +874,7 @@ function defineLevels() {
       { x: 16, y: 18, type: "spike" },
       { x: 18, y: 18, type: "ground" },
       { x: 19, y: 18, type: "ground" },
-      { x: 0, y: 19, type: "ground" },
+      { x: 0, y: 19, type: "start" },
       { x: 1, y: 19, type: "ground" },
       { x: 2, y: 19, type: "ground" },
       { x: 3, y: 19, type: "ground" },
@@ -890,13 +893,9 @@ function defineLevels() {
       { x: 16, y: 19, type: "ground" },
       { x: 17, y: 19, type: "ground" },
       { x: 18, y: 19, type: "ground" },
+      { x: 19, y: 19, type: "ground" },
     ],
     3: [
-      {
-        x: 0,
-        y: 0,
-        type: "coin",
-      },
       {
         x: 6,
         y: 0,
@@ -970,7 +969,7 @@ function defineLevels() {
       {
         x: 0,
         y: 1,
-        type: "coin",
+        type: "end",
       },
       {
         x: 15,
@@ -1775,7 +1774,7 @@ function defineLevels() {
       {
         x: 0,
         y: 19,
-        type: "ground",
+        type: "start",
       },
       {
         x: 1,
@@ -1882,7 +1881,7 @@ function defineLevels() {
       {
         x: 19,
         y: 0,
-        type: "coin",
+        type: "end",
       },
       {
         x: 0,
@@ -2668,7 +2667,7 @@ function defineLevels() {
       {
         x: 0,
         y: 19,
-        type: "ground",
+        type: "start",
       },
       {
         x: 1,
@@ -2785,7 +2784,7 @@ function defineLevels() {
       {
         x: 19,
         y: 0,
-        type: "coin",
+        type: "end",
       },
       {
         x: 2,
@@ -3245,7 +3244,7 @@ function defineLevels() {
       {
         x: 0,
         y: 19,
-        type: "ground",
+        type: "start",
       },
       {
         x: 1,
@@ -3351,7 +3350,7 @@ function setup() {
   createCanvas(800, 800);
   defineLevels();
   player = new Player();
-  loadLevel(currentLevel);
+  loadLevel(currentLevel + 3);
 }
 
 // --- MAIN LOOP ---
@@ -3373,17 +3372,16 @@ function draw() {
 
   drawHUD();
 
-  if (allCoinsCollected && tiles.some((t) => t.type === "coin")) {
+  if (allCoinsCollected && endReached) {
     nextLevel();
   }
 }
 
 // --- LOAD LEVEL ---
 function loadLevel(levelNum) {
-  lastRespawnX = 60;
-  lastRespawnY = height - 30;
   tiles = [];
   const levelData = levels[levelNum];
+  endReached = false;
   if (!levelData) {
     console.warn("No level found for key:", levelNum);
     return;
@@ -3392,6 +3390,12 @@ function loadLevel(levelNum) {
     tiles.push(
       new Tile(t.x * tileSize, t.y * tileSize, tileSize, tileSize, t.type)
     );
+    if (t.type === "start") {
+      startX = t.x * tileSize;
+      startY = t.y * tileSize - tileSize;
+      lastRespawnX = startX;
+      lastRespawnY = startY;
+    }
   }
   player.reset();
 }
@@ -3421,7 +3425,7 @@ class Tile {
 
   // 🆕 New helper method
   isSolid() {
-    return this.type === "ground";
+    return this.type === "ground" || this.type === "start";
   }
 
   display() {
@@ -3431,6 +3435,14 @@ class Tile {
     } else if (this.type === "lava") {
       fill(255, 0, 0);
       rect(this.x, this.y, this.w, this.h);
+    } else if (this.type === "start") {
+      fill(250, 239, 87);
+      rect(this.x, this.y, this.w, this.h);
+      startX = this.x;
+      startY = this.y - tileSize;
+    } else if (this.type === "end") {
+      fill(8, 7, 8);
+      ellipse(this.x + this.w / 2, this.y + this.h / 2, this.w * 0.6);
     } else if (this.type === "spike") {
       fill(200);
       triangle(
@@ -3461,6 +3473,8 @@ class Tile {
         player.coins++;
         lastRespawnX = player.x;
         lastRespawnY = player.y;
+      } else if (this.type === "end") {
+        endReached = true;
       }
     }
   }
@@ -3483,8 +3497,8 @@ class Player {
     this.onGround = false;
   }
   reset() {
-    this.x = 30;
-    this.y = height - 30;
+    this.x = startX;
+    this.y = startY;
     this.xSpeed = 0;
     this.ySpeed = 0;
     this.onGround = false;
