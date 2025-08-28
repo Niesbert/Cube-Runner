@@ -3350,7 +3350,7 @@ function setup() {
   createCanvas(800, 800);
   defineLevels();
   player = new Player();
-  loadLevel(currentLevel + 3);
+  loadLevel(currentLevel);
 }
 
 // --- MAIN LOOP ---
