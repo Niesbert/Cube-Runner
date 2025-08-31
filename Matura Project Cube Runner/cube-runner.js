@@ -8,6 +8,7 @@ let lastRespawnY;
 let startX;
 let startY;
 let endReached;
+let deathcount
 
 // --- DEFINE LEVELS ---
 function defineLevels() {
@@ -3350,6 +3351,7 @@ function setup() {
   createCanvas(800, 800);
   defineLevels();
   player = new Player();
+  deathcount = 0;
   loadLevel(currentLevel);
 }
 
@@ -3407,9 +3409,14 @@ function nextLevel() {
     .map(Number)
     .sort((a, b) => a - b);
   const idx = keys.indexOf(currentLevel);
-  const nextIdx = (idx + 1) % keys.length;
-  currentLevel = keys[nextIdx];
-  loadLevel(currentLevel);
+  if (idx < keys.length - 1) {
+    // go to the next level
+    currentLevel = keys[idx + 1];
+    loadLevel(currentLevel);
+  } else {
+    drawEndScreen();
+    noLoop();
+  }
 }
 
 // --- TILE CLASS ---
@@ -3495,6 +3502,7 @@ class Player {
     this.xSpeed = 0;
     this.ySpeed = 0;
     this.onGround = false;
+    deathcount = deathcount + 1;
   }
   reset() {
     this.x = startX;
@@ -3598,9 +3606,41 @@ function keyPressed() {
   }
 }
 
+// --- END SCREEN ---
+function drawEndScreen() {
+  // A4 aspect ratio: height = width * 1.414
+  let boxWidth = 200;  // adjust as needed (100–1200 px as you said)
+  let boxHeight = boxWidth * 1.414;
+  
+  let x = width / 2 - boxWidth / 2;
+  let y = height / 2 - boxHeight / 2;
+  // main window
+  fill(255);
+  stroke(0);
+  strokeWeight(2);
+  rect(x, y, boxWidth, boxHeight, 20);
+
+  // title (centered at top)
+  textAlign(CENTER, TOP);
+  textSize(32);
+  fill(0);
+  text("End of Game", x + boxWidth / 2, y + 20);
+
+  // stats list
+  textSize(20);
+  textAlign(LEFT, TOP);
+
+  let padding = 60; // spacing from title
+  let lineHeight = 40;
+
+  text( `Deaths: ${deathcount}`, x + 5, y + padding);
+  text("Time: ____", x + 5, y + padding + lineHeight);
+  text(`Coins: ${player.coins}`, x + 5, y + padding + lineHeight * 2);
+}
+
 // --- HUD ---
 function drawHUD() {
   fill(0);
   textSize(16);
-  text(`Level: ${currentLevel}   Coins: ${player.coins}`, 10, 20);
+  text(`Level: ${currentLevel}   Coins: ${player.coins}   Deaths ${deathcount}`, 10, 20);
 }
