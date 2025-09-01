@@ -8,7 +8,9 @@ let lastRespawnY;
 let startX;
 let startY;
 let endReached;
-let deathcount
+let deathcount;
+let gameStartTime;
+let gameTime = 0;
 
 // --- DEFINE LEVELS ---
 function defineLevels() {
@@ -3352,6 +3354,7 @@ function setup() {
   defineLevels();
   player = new Player();
   deathcount = 0;
+  gameStartTime = millis();
   loadLevel(currentLevel);
 }
 
@@ -3359,6 +3362,7 @@ function setup() {
 function draw() {
   background(135, 206, 235);
   endReached = false;
+  gameTime = floor((millis() - gameStartTime) / 1000);
   player.update();
   player.display();
 
@@ -3609,9 +3613,9 @@ function keyPressed() {
 // --- END SCREEN ---
 function drawEndScreen() {
   // A4 aspect ratio: height = width * 1.414
-  let boxWidth = 200;  // adjust as needed (100–1200 px as you said)
+  let boxWidth = 200; // adjust as needed (100–1200 px as you said)
   let boxHeight = boxWidth * 1.414;
-  
+
   let x = width / 2 - boxWidth / 2;
   let y = height / 2 - boxHeight / 2;
   // main window
@@ -3633,8 +3637,8 @@ function drawEndScreen() {
   let padding = 60; // spacing from title
   let lineHeight = 40;
 
-  text( `Deaths: ${deathcount}`, x + 5, y + padding);
-  text("Time: ____", x + 5, y + padding + lineHeight);
+  text(`Deaths: ${deathcount}`, x + 5, y + padding);
+  text(`Time: ${gameTime}s`, x + 5, y + padding + lineHeight);
   text(`Coins: ${player.coins}`, x + 5, y + padding + lineHeight * 2);
 }
 
@@ -3642,5 +3646,9 @@ function drawEndScreen() {
 function drawHUD() {
   fill(0);
   textSize(16);
-  text(`Level: ${currentLevel}   Coins: ${player.coins}   Deaths ${deathcount}`, 10, 20);
+  text(
+    `Level: ${currentLevel}   Coins: ${player.coins}   Deaths ${deathcount}   Time: ${gameTime}s`,
+    10,
+    20
+  );
 }
