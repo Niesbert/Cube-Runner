@@ -11,6 +11,7 @@ let endReached;
 let deathcount;
 let gameStartTime;
 let gameTime = 0;
+let timerStarted = false;
 
 // --- DEFINE LEVELS ---
 function defineLevels() {
@@ -3361,10 +3362,16 @@ function setup() {
 // --- MAIN LOOP ---
 function draw() {
   background(135, 206, 235);
-  endReached = false;
-  gameTime = floor((millis() - gameStartTime) / 1000);
-  player.update();
-  player.display();
+  handleInput(); // your movement/input function
+
+  // Update timer only if started
+  if (timerStarted) {
+    endReached = false;
+    player.update();
+    player.display();
+
+    gameTime = floor((millis() - gameStartTime) / 1000);
+  }
 
   let allCoinsCollected = true;
 
@@ -3607,6 +3614,14 @@ class Player {
 function keyPressed() {
   if (key === " " || keyCode === UP_ARROW) {
     player.jump();
+  }
+}
+function handleInput() {
+  if (keyIsDown(LEFT_ARROW) || keyIsDown(RIGHT_ARROW) || keyIsDown(UP_ARROW)) {
+    if (!timerStarted) {
+      gameStartTime = millis();
+      timerStarted = true;
+    }
   }
 }
 
