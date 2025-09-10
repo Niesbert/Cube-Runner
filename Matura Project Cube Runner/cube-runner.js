@@ -3366,12 +3366,11 @@ function draw() {
 
   // Update timer only if started
   if (timerStarted) {
-    endReached = false;
-    player.update();
-    player.display();
-
     gameTime = floor((millis() - gameStartTime) / 1000);
   }
+  endReached = false;
+  player.update();
+  player.display();
 
   let allCoinsCollected = true;
 
